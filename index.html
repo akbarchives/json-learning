@@ -23,6 +23,7 @@
         const nameTask = document.getElementById('newItem');
         const task = nameTask.value;
 
+        //if the array task is not Null
         if (localStorage.getItem('toDo')) {
           let tempLocal = JSON.parse(localStorage.getItem('toDo'));
           let temp = {
@@ -34,6 +35,7 @@
           tempLocal.push(temp);
           localStorage.setItem('toDo', JSON.stringify(tempLocal));
         } else {
+          //if the array is Null
           let newToDo = [
             {
               id: 1,
@@ -44,6 +46,29 @@
           localStorage.setItem('toDo', JSON.stringify(newToDo));
         }
 
+        location.reload();
+      }
+
+      //task done
+      function doneTask(x) {
+        console.log('update task', x);
+        //load localStorage
+        let temp = JSON.parse(localStorage.getItem('toDo'));
+
+        const doneIndex = temp.findIndex(({ id }) => id === x);
+
+        console.log('sebelum');
+        console.log(temp[doneIndex].isDone);
+        if (temp[doneIndex].isDone == false) {
+          temp[doneIndex].isDone = true;
+        } else {
+          temp[doneIndex].isDone = false;
+        }
+
+        //update localStorage
+        localStorage.setItem('toDo', JSON.stringify(temp));
+
+        //reload page
         location.reload();
       }
 
@@ -124,23 +149,22 @@
       </div>
     </div>
 
-    <h1>cuaksss</h1>
-
     <script>
       //Retrieve
       let toDo = JSON.parse(localStorage.getItem('toDo'));
 
       let taskList = '';
+      let lineThrough = '';
       for (let x in toDo) {
+        if (toDo[x].isDone == true) {
+          lineThrough = 'line-through';
+        } else {
+          lineThrough = ' ';
+        }
         taskList += `<li class="py-2 flex flex-row justify-between">
             <div class="flex justify-between items-center">
-              <input
-                type="checkbox"
-                class="mr-2 rounded-lg"
-                id="input__checkbox"
-              />
               <p 
-              onclick="deleteTask(${toDo[x].id})" class="text-xl font-semibold inline cursor-pointer">
+              onclick="doneTask(${toDo[x].id})" class="text-xl font-semibold inline cursor-pointer ${lineThrough}">
                 ${toDo[x].name}
               </p>
             </div>
