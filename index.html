@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <link
+      rel="stylesheet"
+      href="style.css"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+      //get Last Task id: to make new id numbers
+      function getLastTaskid(arr) {
+        return arr.slice(-1)[0].id;
+      }
+
+      //add new task when add button clicked
+      function addTask() {
+        const nameTask = document.getElementById('newItem');
+        const task = nameTask.value;
+
+        if (localStorage.getItem('toDo')) {
+          let tempLocal = JSON.parse(localStorage.getItem('toDo'));
+          let temp = {
+            id: getLastTaskid(tempLocal) + 1,
+            name: task,
+            isDone: false,
+          };
+
+          tempLocal.push(temp);
+          localStorage.setItem('toDo', JSON.stringify(tempLocal));
+        } else {
+          let newToDo = [
+            {
+              id: 1,
+              name: task,
+              isDone: false,
+            },
+          ];
+          localStorage.setItem('toDo', JSON.stringify(newToDo));
+        }
+
+        location.reload();
+      }
+
+      //delete task button
+      function deleteTask(x) {
+        let temp = JSON.parse(localStorage.getItem('toDo'));
+        //check if item only one
+        if (temp.length === 1) {
+          localStorage.removeItem('toDo');
+        } else {
+          //find index yang akan di hapus
+          const deletedIndex = temp.findIndex(({ id }) => id === x);
+
+          //delete that will be deleted
+          temp.splice(deletedIndex, 1);
+
+          //upload data to localStorage
+          localStorage.setItem('toDo', JSON.stringify(temp));
+        }
+
+        //reload page
+        location.reload();
+      }
+    </script>
+  </head>
+  <body>
+    <div class="flex flex-row h-screen">
+      <aside class="basis-2/12 bg-slate-400 h-full p-8">
+        <h1 class="text-3xl font-bold mb-16">Todoist</h1>
+        <ul class="">
+          <li
+            class="text-xl font-semibold py-2 px-4 hover:bg-zinc-700 hover:rounded-lg hover:text-white"
+          >
+            Today 🌻
+          </li>
+          <li
+            class="text-xl font-semibold py-2 px-4 hover:bg-zinc-700 hover:rounded-lg hover:text-white"
+          >
+            Notes📜
+          </li>
+        </ul>
+      </aside>
+
+      <!-- Main-->
+      <div class="basis-10/12 py-8 px-16">
+        <!-- Nav -->
+        <nav>
+          <div class="pages mb-16">
+            <h1 class="text-3xl font-bold">Today 🌻</h1>
+          </div>
+        </nav>
+        <!-- Content-->
+        <div class="flex flex-col w-96">
+          <!-- Input -->
+          <form class="flex justify-between">
+            <input
+              type="text"
+              placeholder="add your jobs here"
+              class="px-4 py-2 w-64 border border-gray-500 rounded-lg"
+              id="newItem"
+              autofocus
+            />
+            <button
+              class="px-4 py-2 border bg-slate-400 rounded-lg"
+              type="submit"
+              onclick="addTask()"
+            >
+              Add
+            </button>
+          </form>
+          <!-- List -->
+          <div class="mt-8">
+            <ul id="toDoList">
+              <!-- list will retrieve with javascript Here-->
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h1>cuaksss</h1>
+
+    <script>
+      //Retrieve
+      let toDo = JSON.parse(localStorage.getItem('toDo'));
+
+      let taskList = '';
+      for (let x in toDo) {
+        taskList += `<li class="py-2 flex flex-row justify-between">
+            <div class="flex justify-between items-center">
+              <input
+                type="checkbox"
+                class="mr-2 rounded-lg"
+                id="input__checkbox"
+              />
+              <p 
+              onclick="deleteTask(${toDo[x].id})" class="text-xl font-semibold inline cursor-pointer">
+                ${toDo[x].name}
+              </p>
+            </div>
+            <button class="p-2 text-white bg-red-500 rounded-lg" onclick="deleteTask(${toDo[x].id})">delete</button>
+          </li>`;
+      }
+
+      //add taskList to HTML
+      document.getElementById('toDoList').innerHTML = taskList;
+    </script>
+  </body>
+</html>
