@@ -57,8 +57,6 @@
 
         const doneIndex = temp.findIndex(({ id }) => id === x);
 
-        console.log('sebelum');
-        console.log(temp[doneIndex].isDone);
         if (temp[doneIndex].isDone == false) {
           temp[doneIndex].isDone = true;
         } else {
@@ -95,13 +93,14 @@
     </script>
   </head>
   <body class="w-sm px-8 py-4 mx-auto">
+    <!-- nav -->
     <nav>
       <div class="pages mb-8">
         <h1 class="text-3xl font-bold border-b border-black py-4">Today 🌻</h1>
       </div>
     </nav>
 
-    <div class="flex flex-col max-w-sm md:max-w-md mx-auto">
+    <div class="flex flex-col w-full sm:max-w-sm mx-auto">
       <form class="flex justify-between">
         <input
           type="text"
@@ -126,6 +125,14 @@
       </div>
     </div>
 
+    <!-- notif -->
+
+    <div
+      id="popupNotification"
+      class="bg-gray-200 py-2 px-4 w-[300px] text-center"
+    >
+      <span id="popupText">Tips: tap the task to mark/unmark</span>
+    </div>
     <script>
       //Retrieve
       let toDo = JSON.parse(localStorage.getItem('toDo'));
@@ -139,18 +146,31 @@
           lineThrough = ' ';
         }
         taskList += `<li class="py-2 flex flex-row justify-between">
-            <div class="flex justify-between items-center">
-              <p 
-              onclick="doneTask(${toDo[x].id})" class="text-xl font-semibold inline cursor-pointer ${lineThrough} decoration-2">
-                ${toDo[x].name}
-              </p>
-            </div>
-            <button class="p-2 text-white bg-black font-semibold text-white" onclick="deleteTask(${toDo[x].id})">✕</button>
-          </li>`;
+                  <div class="flex justify-between items-center">
+                    <p
+                    onclick="doneTask(${toDo[x].id})" class="text-xl font-semibold inline cursor-pointer ${lineThrough} decoration-2">
+                      ${toDo[x].name}
+                    </p>
+                  </div>
+                  <button class="p-2 text-white bg-black font-semibold text-white" onclick="deleteTask(${toDo[x].id})">✕</button>
+                </li>`;
       }
 
       //add taskList to HTML
       document.getElementById('toDoList').innerHTML = taskList;
+
+      //popup
+
+      window.addEventListener('load', event => {
+        setTimeout(function () {
+          var popupNotification = document.getElementById('popupNotification');
+          popupNotification.style.display = 'block';
+        }, 0);
+
+        setTimeout(function () {
+          popupNotification.style.display = 'none';
+        }, 4200);
+      });
     </script>
   </body>
 </html>

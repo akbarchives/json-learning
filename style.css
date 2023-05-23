@@ -1,0 +1,14 @@
+#popupNotification {
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  /* background-color: #f1f1f1;
+  padding: 20px;
+  border-radius: 5px; */
+}
+
+#popupText {
+  font-size: 18px;
+}
