@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta
       name="description"
-      content="very lightweight todo list and used localstorage of your browser. it's suitable for used as a new tab. So, your task still tracked"
+      content="very lightweight toDoMonthly list and used localstorage of your browser. it's suitable for used as a new tab. So, your task still tracked"
     />
     <meta
       name="keywords"
@@ -41,8 +41,8 @@
         const task = nameTask.value;
 
         //if the array task is not Null
-        if (localStorage.getItem('toDo')) {
-          let tempLocal = JSON.parse(localStorage.getItem('toDo'));
+        if (localStorage.getItem('toDoMonthly')) {
+          let tempLocal = JSON.parse(localStorage.getItem('toDoMonthly'));
           let temp = {
             id: getLastTaskid(tempLocal) + 1,
             name: task,
@@ -50,17 +50,17 @@
           };
 
           tempLocal.push(temp);
-          localStorage.setItem('toDo', JSON.stringify(tempLocal));
+          localStorage.setItem('toDoMonthly', JSON.stringify(tempLocal));
         } else {
           //if the array is Null
-          let newToDo = [
+          let newtoDoMonthly = [
             {
               id: 1,
               name: task,
               isDone: false,
             },
           ];
-          localStorage.setItem('toDo', JSON.stringify(newToDo));
+          localStorage.setItem('toDoMonthly', JSON.stringify(newtoDoMonthly));
         }
 
         location.reload();
@@ -70,7 +70,7 @@
       function doneTask(x) {
         console.log('update task', x);
         //load localStorage
-        let temp = JSON.parse(localStorage.getItem('toDo'));
+        let temp = JSON.parse(localStorage.getItem('toDoMonthly'));
 
         const doneIndex = temp.findIndex(({ id }) => id === x);
 
@@ -81,7 +81,7 @@
         }
 
         //update localStorage
-        localStorage.setItem('toDo', JSON.stringify(temp));
+        localStorage.setItem('toDoMonthly', JSON.stringify(temp));
 
         //reload page
         location.reload();
@@ -89,10 +89,10 @@
 
       //delete task button
       function deleteTask(x) {
-        let temp = JSON.parse(localStorage.getItem('toDo'));
+        let temp = JSON.parse(localStorage.getItem('toDoMonthly'));
         //check if item only one
         if (temp.length === 1) {
-          localStorage.removeItem('toDo');
+          localStorage.removeItem('toDoMonthly');
         } else {
           //find index yang akan di hapus
           const deletedIndex = temp.findIndex(({ id }) => id === x);
@@ -101,7 +101,7 @@
           temp.splice(deletedIndex, 1);
 
           //upload data to localStorage
-          localStorage.setItem('toDo', JSON.stringify(temp));
+          localStorage.setItem('toDoMonthly', JSON.stringify(temp));
         }
 
         //reload page
@@ -124,7 +124,7 @@
       >
         <a
           href="/index.html"
-          class="py-2 px-4 inline-block border bg-black text-white hover:bg-black hover:text-white"
+          class="py-2 px-4 inline-block border hover:bg-black hover:text-white"
           >Today</a
         >
         <a
@@ -134,7 +134,7 @@
         >
         <a
           href="/monthly.html"
-          class="py-2 px-4 inline-block border hover:bg-black hover:text-white"
+          class="py-2 px-4 inline-block border bg-black text-white hover:bg-black hover:text-white"
           >Monthly</a
         >
       </div>
@@ -156,7 +156,7 @@
       </form>
 
       <div class="mt-8">
-        <ul id="toDoList">
+        <ul id="toDoMonthlyList">
           <!-- list will retrieve with javascript Here -->
         </ul>
       </div>
@@ -172,12 +172,12 @@
     </div>
     <script>
       //Retrieve
-      let toDo = JSON.parse(localStorage.getItem('toDo'));
+      let toDoMonthly = JSON.parse(localStorage.getItem('toDoMonthly'));
 
       let taskList = '';
       let lineThrough = '';
-      for (let x in toDo) {
-        if (toDo[x].isDone == true) {
+      for (let x in toDoMonthly) {
+        if (toDoMonthly[x].isDone == true) {
           lineThrough = 'line-through';
         } else {
           lineThrough = ' ';
@@ -185,16 +185,16 @@
         taskList += `<li class="py-2 flex flex-row justify-between">
                   <div class="flex justify-between items-center">
                     <p
-                    onclick="doneTask(${toDo[x].id})" class="text-xl font-semibold inline cursor-pointer ${lineThrough} decoration-2">
-                      ${toDo[x].name}
+                    onclick="doneTask(${toDoMonthly[x].id})" class="text-xl font-semibold inline cursor-pointer ${lineThrough} decoration-2">
+                      ${toDoMonthly[x].name}
                     </p>
                   </div>
-                  <button class="p-2 text-white bg-black font-semibold text-white" onclick="deleteTask(${toDo[x].id})">✕</button>
+                  <button class="p-2 text-white bg-black font-semibold text-white" onclick="deleteTask(${toDoMonthly[x].id})">✕</button>
                 </li>`;
       }
 
       //add taskList to HTML
-      document.getElementById('toDoList').innerHTML = taskList;
+      document.getElementById('toDoMonthlyList').innerHTML = taskList;
 
       //popup
 
